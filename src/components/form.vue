@@ -4,21 +4,47 @@ import fields from "../components/fields";
 import submitButton from "../components/buttons/submit.vue";
 import resetButton from "../components/buttons/reset.vue";
 import store from "@/store";
+import SelectField from "./fields/selectField.vue";
+
+export interface selectField {
+  type: "select",
+  options: Array<string>,
+  value: string,
+  label: string,
+  required: boolean,
+  name: string,
+};
+
+export interface textField {
+  type: "string" | "textarea",
+  value: string,
+  label: string,
+  required: boolean,
+  name: string,
+};
+
+export interface booleanField {
+  type: "checkbox",
+  value: boolean,
+  label: string,
+  required: boolean,
+  name: string,
+};
 
 const props = defineProps({
   formfields: {
-    type: Array,
+    type: Array<selectField | textField | booleanField>,
     required: true,
   },
   formSceleton: {
-    type: Array,
+    type: Array<Array<string>>,
     required: true,
   },
 })
 
 onMounted(() => {
   store.commit("deleteCurrentFormFIelds");
-  props.formfields.forEach(field => {
+  props.formfields.forEach((field: selectField | textField | booleanField) => {
     store.commit("initialFormField", {
       val: field.value,
       name: field.name,
@@ -27,11 +53,31 @@ onMounted(() => {
   });
 });
 
-const getFieldByName = name => {
-  return props.formfields.find(item => item.name === name);
+const getFieldByName = (name: string) => {
+  const field = props.formfields.find(item => item.name === name);
+
+  if (field === undefined) {
+    throw new TypeError('The value was promised to always be there!');
+  }
+
+  return field;
 };
 
-const getFieldComponent = key => {
+const getOptions = (name: string) => {
+  const field = props.formfields.find(item => item.name === name);
+
+  if (field === undefined) {
+    throw new TypeError('The value was promised to always be there!');
+  }
+
+  if (field.type === "select") {
+    return field.options;
+  } else {
+    return undefined;
+  }
+};
+
+const getFieldComponent = (key: "string" | "select" | "checkbox" | "textarea") => {
   return fields[key];
 };
 
@@ -90,11 +136,11 @@ const resetForm = () => {
           :is="getFieldComponent(getFieldByName(blockItem).type)"
           :name="getFieldByName(blockItem).name"
           :value="getFieldByName(blockItem).value"
-          :options="getFieldByName(blockItem).options"
+          :options="getOptions(blockItem)"
           :initialValue="getFieldByName(blockItem).value"
           :required="getFieldByName(blockItem).required"
         >
-          {{getFieldByName(blockItem).label}}
+          {{ getFieldByName(blockItem).label }}
         </component>
       </div>
     </div>

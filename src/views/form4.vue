@@ -1,30 +1,6 @@
 <script setup lang="ts">
 import formComponent from "../components/form.vue";
-
-interface selectField {
-  type: string,
-  options: Array<string>,
-  value: string | null,
-  label: string,
-  required: boolean,
-  name: string,
-};
-
-interface textField {
-  type: string,
-  value: string,
-  label: string,
-  required: boolean,
-  name: string,
-};
-
-interface booleanField {
-  type: string,
-  value: boolean,
-  label: string,
-  required: boolean,
-  name: string,
-};
+import type { selectField, textField, booleanField } from '../components/form.vue';
 
 const mokedFormFields: Array<selectField | textField | booleanField> = [
   {

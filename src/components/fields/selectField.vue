@@ -8,7 +8,7 @@ const props = defineProps({
     required: true,
   },
   options: {
-    type: Array,
+    type: Array<string>,
     default: () => [],
   },
   initialValue: {
@@ -26,7 +26,6 @@ const value = computed({
     return store.state.currentForm[props.name]?.value;
   },
   set(newValue) {
-    console.log(newValue);
     store.commit("updateFormField", {name: props.name, val: newValue});
   }
 })
