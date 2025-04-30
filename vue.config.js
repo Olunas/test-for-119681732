@@ -7,7 +7,5 @@ export default defineConfig({
 })
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/test-for-119681732/'
-    : '/'
+  publicPath: "/test-for-119681732/"
 }
