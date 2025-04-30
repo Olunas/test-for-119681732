@@ -5,3 +5,9 @@ export default defineConfig({
   base: "test-for-119681732",
   plugins: [vue()]
 })
+
+module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/test-for-119681732/'
+    : '/'
+}
